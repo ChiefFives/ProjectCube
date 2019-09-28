@@ -15,6 +15,7 @@ public class BossOne : MonoBehaviour
     bool bossHit;
     int waypointIndex;
     public float maxSpeed;
+    bool reset = true;
     private void Awake() {
         trigger = GameObject.Find("Trigger2");
         cannon = GameObject.Find("cannon");
@@ -52,11 +53,11 @@ public class BossOne : MonoBehaviour
         switch (bossStates)
         {
             case 1:
-            //Debug.Log("Move Boss");
+            Debug.Log("Move Boss");
             Move();
             break;
             case 2:
-            //Debug.Log("Call Cannon");
+            Debug.Log("Call Cannon");
             CallCannon();
             break;
             case 3:
@@ -78,6 +79,13 @@ public class BossOne : MonoBehaviour
     }
     private void CallCannon(){
         CannonBehaviour cannonScript = cannon.GetComponent<CannonBehaviour>();
+        if(reset){
+            cannonScript.waypointIndex = 1;
+            cannonScript.cannonTimeStamp = 0.0f;
+            cannonScript.cannonDmg = false;
+            cannonScript.bossDmg = false;
+            reset = false;
+        }
         cannonScript.Move();
         if(cannonScript.bossDmg && bossTimer > 15.0f){
             bossHit = true;
@@ -99,6 +107,7 @@ public class BossOne : MonoBehaviour
         fallBossTimer = 0.0f;
         bossTimer = 0.0f;
         waypointIndex = 0;
+        reset = true;
     }
 }
 
